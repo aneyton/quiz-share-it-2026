@@ -7,157 +7,168 @@
 <body>
 <title>Quiz Share it 2026</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Urbanist:wght@400;600;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
 <style>
-/* Layout : un plateau de jeu télé parodique. Fond studio bleu avec projecteur, titres en capitales condensées, réponses en pastilles dorées. Une colonne, un écran à la fois. */
+/* Layout : un écran de jeu 8 bits. Fond nuit, cadres en pixels (pas d'arrondis), titres en police pixel, texte en police terminal. Une colonne, un écran à la fois. */
 :root {
-  --studio: #08154A;
-  --studio-2: #1534A8;
-  --or: #FFC72C;
-  --or-fonce: #E0A400;
-  --blanc: #FFFFFF;
-  --encre: #08154A;
-  --vert: #22C55E;
-  --rouge: #EF4444;
+  --nuit: #0E0B2B;
+  --nuit-2: #1B1650;
+  --blanc: #F4F1E8;
+  --jaune: #FFD93D;
   --rose: #F9217E;
-  --display: "Anton", "Impact", "Arial Narrow", sans-serif;
-  --font: "Urbanist", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --cyan: #4CE0F5;
+  --vert: #3DDC84;
+  --rouge: #FF4D4D;
+  --gris: #8C88B8;
+  --pixel: "Press Start 2P", "Courier New", monospace;
+  --font: "VT323", "Courier New", monospace;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { min-height: 100%; background: var(--studio); }
+html { min-height: 100%; background: var(--nuit); }
 body {
-  min-height: 100%; margin: 0; color: var(--blanc); font-family: var(--font); font-size: 16px; line-height: 1.45;
+  min-height: 100%; margin: 0; color: var(--blanc); font-family: var(--font); font-size: 22px; line-height: 1.25;
   background:
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.22), transparent 70%),
-    repeating-conic-gradient(from 0deg at 50% 0%, rgba(255,255,255,.05) 0 6deg, transparent 6deg 12deg),
-    linear-gradient(180deg, var(--studio-2), var(--studio) 70%);
-  background-attachment: fixed;
+    linear-gradient(rgba(255,255,255,.035) 50%, transparent 50%) 0 0 / 100% 4px,
+    radial-gradient(2px 2px at 20px 30px, var(--blanc) 50%, transparent 51%) 0 0 / 120px 120px,
+    radial-gradient(2px 2px at 80px 90px, var(--cyan) 50%, transparent 51%) 0 0 / 160px 160px,
+    var(--nuit);
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 22px 40px;
+  padding-block: 20px 40px;
+  image-rendering: pixelated;
 }
-.page { max-width: 520px; margin: 0 auto; display: grid; gap: 18px; }
-.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.presents { font-weight: 800; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--or); }
-.mute { font: 700 13px var(--font); color: var(--blanc); background: rgba(255,255,255,.12); border: none; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.page { max-width: 540px; margin: 0 auto; display: grid; gap: 18px; }
 
-.logo { text-align: center; display: grid; gap: 2px; padding-block: 6px; }
-.logo .l1 { font-family: var(--display); font-size: clamp(22px, 6vw, 28px); letter-spacing: .04em; color: var(--blanc); text-transform: uppercase; }
+/* Cadre pixel : bordure en escalier, sans arrondi */
+.px {
+  background: var(--nuit-2);
+  box-shadow:
+    0 -4px 0 0 var(--blanc), 0 4px 0 0 var(--blanc), -4px 0 0 0 var(--blanc), 4px 0 0 0 var(--blanc),
+    8px 8px 0 0 rgba(0,0,0,.5);
+  margin: 4px;
+}
+
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--pixel); font-size: 10px; color: var(--gris); }
+.mute { font-family: var(--pixel); font-size: 10px; color: var(--blanc); background: var(--nuit-2); border: none; padding: 8px 10px; cursor: pointer; box-shadow: 0 0 0 3px var(--gris); }
+
+.logo { text-align: center; display: grid; gap: 14px; padding-block: 14px 4px; }
+.logo .l1 { font-family: var(--pixel); font-size: clamp(14px, 4vw, 18px); color: var(--cyan); }
 .logo .l2 {
-  font-family: var(--display); font-size: clamp(44px, 14vw, 72px); line-height: .95; text-transform: uppercase;
-  color: var(--or); text-shadow: 0 4px 0 var(--or-fonce), 0 8px 24px rgba(0,0,0,.45);
+  font-family: var(--pixel); font-size: clamp(26px, 8.4vw, 44px); line-height: 1.15; color: var(--jaune);
+  text-shadow: 4px 4px 0 var(--rose), 8px 8px 0 rgba(0,0,0,.5);
 }
-.logo .l3 { font-weight: 800; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+.logo .l3 { font-family: var(--pixel); font-size: 11px; color: var(--blanc); }
+.blink { animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
 
-.host {
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 16px;
-  padding: 14px 16px; display: grid; gap: 4px;
-}
-.host .who { font-weight: 800; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--or); }
-.host p { margin: 0; font-size: 16px; }
-
-label { font-weight: 800; font-size: 14px; }
-input[type="text"] { font: 600 18px var(--font); padding: 13px 16px; border-radius: 999px; border: 3px solid var(--or); width: 100%; color: var(--encre); background: var(--blanc); }
-.check { display: flex; gap: 10px; align-items: center; font-weight: 600; font-size: 15px; }
-.check input { width: 20px; height: 20px; accent-color: var(--or); }
-.field { display: grid; gap: 6px; }
+.box { padding: 16px 18px; display: grid; gap: 8px; }
+.box .who { font-family: var(--pixel); font-size: 10px; color: var(--jaune); }
+.box p { margin: 0; }
 
 .btn {
-  font-family: var(--display); font-size: 22px; letter-spacing: .06em; text-transform: uppercase;
-  cursor: pointer; border: none; border-radius: 999px; padding: 14px 30px;
-  background: var(--or); color: var(--encre); box-shadow: 0 5px 0 var(--or-fonce);
-  justify-self: center;
+  font-family: var(--pixel); font-size: 14px; line-height: 1.4; cursor: pointer; border: none;
+  padding: 16px 20px; background: var(--rose); color: var(--blanc); justify-self: center;
+  box-shadow: 0 -4px 0 0 #8E0F48 inset, 0 0 0 4px var(--blanc), 6px 6px 0 4px rgba(0,0,0,.5);
+  margin: 6px;
 }
-.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--or-fonce); }
-.btn.ghost { background: rgba(255,255,255,.14); color: var(--blanc); box-shadow: none; font-size: 18px; }
-.btn:focus-visible, .opt:focus-visible, input:focus-visible, .mute:focus-visible { outline: 3px solid var(--blanc); outline-offset: 3px; }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 -2px 0 0 #8E0F48 inset, 0 0 0 4px var(--blanc); }
+.btn.ghost { background: var(--nuit-2); box-shadow: 0 0 0 4px var(--gris), 6px 6px 0 4px rgba(0,0,0,.5); }
+.btn:focus-visible, .opt:focus-visible, .mute:focus-visible { outline: 3px dashed var(--jaune); outline-offset: 8px; }
 
-.bandeau { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.qnum { font-family: var(--display); font-size: 20px; letter-spacing: .05em; text-transform: uppercase; }
-.pts { font-family: var(--display); font-size: 20px; letter-spacing: .05em; background: var(--or); color: var(--encre); border-radius: 999px; padding: 4px 14px; font-variant-numeric: tabular-nums; }
-.top-call { font-family: var(--display); font-size: 34px; color: var(--or); letter-spacing: .04em; line-height: 1; }
-.question {
-  background: linear-gradient(180deg, #FFFFFF, #E8ECFA); color: var(--encre);
-  border-radius: 20px; padding: 18px 18px; font-weight: 800; font-size: clamp(19px, 5.2vw, 22px); line-height: 1.3;
-  box-shadow: 0 0 0 4px var(--or), 0 10px 30px rgba(0,0,0,.35); text-wrap: balance;
-}
-.opts { display: grid; gap: 10px; }
+.hud { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--pixel); font-size: 11px; }
+.hud .lvl { color: var(--cyan); }
+.hud .score { color: var(--jaune); font-variant-numeric: tabular-nums; }
+.lives { display: flex; gap: 6px; }
+.lives span { width: 14px; height: 14px; background: var(--gris); }
+.lives span.done { background: var(--vert); }
+.lives span.miss { background: var(--rouge); }
+.lives span.now { background: var(--jaune); }
+
+.question { padding: 18px; font-size: clamp(23px, 6vw, 27px); line-height: 1.2; }
+.opts { display: grid; gap: 14px; }
 .opt {
-  display: flex; gap: 12px; align-items: center; text-align: left;
-  font: 700 17px var(--font); color: var(--blanc); cursor: pointer;
-  background: linear-gradient(180deg, #2447C9, #12308F); border: 3px solid var(--or); border-radius: 999px; padding: 10px 18px 10px 10px;
+  display: flex; gap: 14px; align-items: center; text-align: left; cursor: pointer;
+  font-family: var(--font); font-size: 23px; line-height: 1.15; color: var(--blanc);
+  background: var(--nuit-2); border: none; padding: 12px 14px; margin: 0 4px;
+  box-shadow: 0 0 0 4px var(--cyan);
 }
-.opt .letter { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--or); color: var(--encre); display: grid; place-items: center; font-family: var(--display); font-size: 18px; }
+.opt .letter { flex: none; font-family: var(--pixel); font-size: 13px; color: var(--nuit); background: var(--cyan); padding: 6px 7px; }
+.opt:hover:not(:disabled) { background: #2A2470; }
+.opt:hover:not(:disabled)::after { content: "◀"; margin-left: auto; color: var(--jaune); font-family: var(--pixel); font-size: 12px; }
 .opt:disabled { cursor: default; }
-.opt.good { background: linear-gradient(180deg, #2BD46A, #179848); border-color: #fff; }
-.opt.bad { background: linear-gradient(180deg, #F87171, #C62828); border-color: #fff; }
-.opt.dim { opacity: .45; }
-.explain .verdict { font-family: var(--display); font-size: 26px; letter-spacing: .04em; text-transform: uppercase; }
+.opt.good { box-shadow: 0 0 0 4px var(--vert); background: #134A33; }
+.opt.good .letter { background: var(--vert); }
+.opt.bad { box-shadow: 0 0 0 4px var(--rouge); background: #4A1320; }
+.opt.bad .letter { background: var(--rouge); }
+.opt.dim { opacity: .35; }
+.explain .verdict { font-family: var(--pixel); font-size: 14px; }
 .explain .verdict.good { color: var(--vert); }
 .explain .verdict.bad { color: var(--rouge); }
 
-.score { text-align: center; display: grid; gap: 6px; }
-.score .big { font-family: var(--display); font-size: 84px; line-height: 1; color: var(--or); text-shadow: 0 4px 0 var(--or-fonce); font-variant-numeric: tabular-nums; }
-.score .title { font-family: var(--display); font-size: clamp(26px, 7vw, 34px); line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
-.score .time { color: rgba(255,255,255,.75); }
-.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.note { font-size: 12px; color: rgba(255,255,255,.6); text-align: center; margin: 0; }
-.outro { text-align: center; color: rgba(255,255,255,.85); margin: 0; }
+.result { text-align: center; display: grid; gap: 14px; justify-items: center; }
+.result .over { font-family: var(--pixel); font-size: clamp(22px, 7vw, 34px); color: var(--rose); text-shadow: 4px 4px 0 rgba(0,0,0,.5); }
+.result .big { font-family: var(--pixel); font-size: clamp(34px, 11vw, 52px); color: var(--jaune); text-shadow: 4px 4px 0 var(--rose); font-variant-numeric: tabular-nums; }
+.result .title { font-family: var(--pixel); font-size: clamp(12px, 3.6vw, 15px); line-height: 1.6; color: var(--cyan); text-wrap: balance; }
+.result .time { color: var(--gris); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.note { font-size: 18px; color: var(--gris); text-align: center; margin: 0; }
+@media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
 </style>
 
 <main class="page">
   <div class="top">
-    <div class="presents">Share it présente</div>
-    <button class="mute" id="mute" type="button" aria-pressed="false">🔊 Son</button>
+    <span>SHARE IT PRÉSENTE</span>
+    <button class="mute" id="mute" type="button" aria-pressed="false">♪ ON</button>
   </div>
 
   <!-- Accueil -->
   <section id="home" class="page">
     <div class="logo">
-      <div class="l1">Les champions</div>
-      <div class="l2">de l'impact</div>
-      <div class="l3">Spéciale 2026</div>
+      <div class="l1">LES CHAMPIONS</div>
+      <div class="l2">DE L'IMPACT</div>
+      <div class="l3">ÉDITION 2026</div>
     </div>
-    <div class="host">
-      <div class="who">L'animateur</div>
-      <p>Bonsoir, bonsoir ! Ce soir, 8 questions sur les associations qu'on accompagne. Pas de joker, pas de public, que du cœur. Êtes-vous prêt·e ?</p>
+    <div class="px box">
+      <div class="who">▶ MISSION</div>
+      <p>8 questions sur les associations qu'on accompagne. Pas de vie en plus, pas de code de triche. Juste vous et l'impact.</p>
     </div>
-    <button class="btn" id="go" type="button">Je me lance !</button>
+    <button class="btn" id="go" type="button"><span class="blink">APPUYEZ SUR START</span></button>
     <p class="note">Le chrono démarre à la première question. Rien n'est enregistré.</p>
   </section>
 
   <!-- Question -->
   <section id="quiz" class="page" hidden>
-    <div class="bandeau">
-      <div class="qnum" id="qNum"></div>
-      <div class="pts" id="pts">0 pt</div>
+    <div class="hud">
+      <span class="lvl" id="qNum"></span>
+      <span class="score" id="pts">SCORE 0</span>
     </div>
-    <div class="top-call" aria-hidden="true">Top !</div>
-    <div class="question" id="qText"></div>
+    <div class="lives" id="lives" aria-hidden="true"></div>
+    <div class="px question" id="qText"></div>
     <div class="opts" id="opts"></div>
-    <div class="host explain" id="explain" hidden aria-live="polite">
+    <div class="px box explain" id="explain" hidden aria-live="polite">
       <div class="verdict" id="verdict"></div>
       <p id="expText"></p>
     </div>
-    <button class="btn" id="next" type="button" hidden>Question suivante</button>
+    <button class="btn" id="next" type="button" hidden>NIVEAU SUIVANT ▶</button>
   </section>
 
   <!-- Résultat -->
-  <section id="result" class="page" hidden>
-    <div class="score">
-      <div class="presents">Résultat de notre candidat·e</div>
-      <div class="big" id="sBig"></div>
-      <div class="title" id="sTitle"></div>
-      <div class="time" id="sTime"></div>
+  <section id="result" class="page result" hidden>
+    <div class="over">PARTIE TERMINÉE</div>
+    <div class="big" id="sBig"></div>
+    <div class="title" id="sTitle"></div>
+    <div class="time" id="sTime"></div>
+    <div class="px box" style="text-align:left">
+      <div class="who">▶ BONUS CACHÉ</div>
+      <p>Le mot le plus écrit dans nos 156 témoignages ? « Équipe ». 87 fois. Merci à toutes celles et ceux qui la composent.</p>
     </div>
-    <p class="outro">Le mot le plus écrit dans nos 156 témoignages ? « Équipe ». 87 fois. Merci à toutes celles et ceux qui la composent.</p>
     <div class="row">
-      <button class="btn" id="copy" type="button">Copier mon score</button>
-      <button class="btn ghost" id="again" type="button">Rejouer</button>
+      <button class="btn" id="copy" type="button">COPIER MON SCORE</button>
+      <button class="btn ghost" id="again" type="button">REJOUER</button>
     </div>
-    <p class="note">Votre score n'est enregistré nulle part. Il reste entre vous et l'animateur.</p>
+    <p class="note">Votre score n'est enregistré nulle part.</p>
   </section>
 </main>
 
@@ -188,44 +199,46 @@ const Q = [
     o: ["une île indonésienne", "un groupe de musique", "une danse de salon", "un café trop fort"], a: 1,
     e: "Un groupe de musique. « Maintenant je comprends des blagues d'informaticiens (parfois elles sont drôles) et j'adore mon nouveau job de PO ! »" },
 ];
-const GOOD = ["Oui !", "Bravo !", "Exactement !", "Formidable !"];
-const BAD = ["Ah non…", "Dommage !", "Eh non !", "Raté !"];
+const GOOD = ["+1 POINT !", "BIEN JOUÉ !", "COMBO !", "PARFAIT !"];
+const BAD = ["AÏE…", "RATÉ !", "PERDU !", "OUPS !"];
 const TITLES = [
-  [2, "Éliminé·e au premier tour (mais applaudi·e)"],
-  [5, "Demi-finaliste honorable"],
-  [7, "Finaliste, à un cheveu du titre"],
-  [8, "Champion·ne de l'impact !"],
+  [2, "Niveau 1 : vous venez d'appuyer sur START"],
+  [5, "Niveau intermédiaire débloqué"],
+  [7, "Boss final presque battu"],
+  [8, "High score ! Champion·ne de l'impact"],
 ];
 const LETTERS = ["A", "B", "C", "D"];
 
 const $ = (id) => document.getElementById(id);
-let i = 0, good = 0, t0 = 0, answered = false, muted = false, ctx = null;
+let i = 0, good = 0, t0 = 0, answered = false, muted = false, ctx = null, hist = [];
 
-function tone(freqs, type, dur) {
+function tone(freqs, dur) {
   if (muted) return;
   try {
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
     freqs.forEach((f, k) => {
       const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + k * dur;
-      o.type = type; o.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur + 0.02);
+      o.type = "square"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.06, t); g.gain.setValueAtTime(0.0001, t + dur * 0.9);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur);
     });
   } catch (e) {}
 }
-const ding = () => tone([880, 1320], "sine", 0.16);
-const buzz = () => tone([140, 120], "sawtooth", 0.22);
-const fanfare = () => tone([523, 659, 784, 1047], "triangle", 0.15);
+const coin = () => tone([988, 1319], 0.09);
+const miss = () => tone([220, 165, 110], 0.12);
+const win = () => tone([523, 659, 784, 1047, 784, 1047], 0.1);
+const startSnd = () => tone([392, 523, 659], 0.08);
 
 function show(id) { ["home", "quiz", "result"].forEach((s) => $(s).hidden = s !== id); window.scrollTo({ top: 0 }); }
 function fmt(s) { return Math.floor(s / 60) + " min " + String(s % 60).padStart(2, "0"); }
-function pts(n) { return n + (n > 1 ? " pts" : " pt"); }
+function pad(n) { return String(n).padStart(4, "0"); }
 
 function renderQ() {
   answered = false;
   const item = Q[i];
-  $("qNum").textContent = "Question " + (i + 1) + " / " + Q.length;
-  $("pts").textContent = pts(good);
+  $("qNum").textContent = "NIVEAU " + (i + 1) + "/" + Q.length;
+  $("pts").textContent = "SCORE " + pad(good * 100);
+  $("lives").innerHTML = Q.map((_, k) => `<span class="${k < i ? (hist[k] ? "done" : "miss") : k === i ? "now" : ""}"></span>`).join("");
   $("qText").textContent = item.q;
   $("explain").hidden = true; $("next").hidden = true;
   const box = $("opts"); box.innerHTML = "";
@@ -246,38 +259,39 @@ function pick(k) {
   btns.forEach((b, n) => { b.disabled = true; if (n !== item.a && n !== k) b.classList.add("dim"); });
   btns[item.a].classList.add("good");
   const ok = k === item.a;
-  if (ok) { good++; ding(); } else { btns[k].classList.add("bad"); buzz(); }
-  $("pts").textContent = pts(good);
+  hist[i] = ok;
+  if (ok) { good++; coin(); } else { btns[k].classList.add("bad"); miss(); }
+  $("pts").textContent = "SCORE " + pad(good * 100);
   $("verdict").textContent = ok ? GOOD[i % GOOD.length] : BAD[i % BAD.length];
   $("verdict").className = "verdict " + (ok ? "good" : "bad");
   $("expText").textContent = item.e;
   $("explain").hidden = false;
-  $("next").textContent = i === Q.length - 1 ? "Verdict !" : "Question suivante";
+  $("next").textContent = i === Q.length - 1 ? "VOIR MON SCORE ▶" : "NIVEAU SUIVANT ▶";
   $("next").hidden = false; $("next").focus();
 }
 
 function finish() {
   const secs = Math.round((Date.now() - t0) / 1000);
-  $("sBig").textContent = pts(good);
+  $("sBig").textContent = good + "/" + Q.length;
   $("sTitle").textContent = TITLES.find((t) => good <= t[0])[1];
-  $("sTime").textContent = "Sur " + Q.length + " questions, en " + fmt(secs) + ".";
-  if (good >= 6) fanfare();
+  $("sTime").textContent = "Temps : " + fmt(secs);
+  if (good >= 6) win();
   show("result");
 }
 
-$("go").addEventListener("click", () => { i = 0; good = 0; t0 = Date.now(); renderQ(); show("quiz"); });
+$("go").addEventListener("click", () => { i = 0; good = 0; hist = []; t0 = Date.now(); startSnd(); renderQ(); show("quiz"); });
 $("next").addEventListener("click", () => { i++; if (i < Q.length) renderQ(); else finish(); });
 $("again").addEventListener("click", () => show("home"));
 $("mute").addEventListener("click", (e) => {
   muted = !muted;
   e.currentTarget.setAttribute("aria-pressed", String(muted));
-  e.currentTarget.textContent = muted ? "🔇 Muet" : "🔊 Son";
+  e.currentTarget.textContent = muted ? "♪ OFF" : "♪ ON";
 });
 $("copy").addEventListener("click", async () => {
-  const txt = "Les champions de l'impact, spéciale 2026 : " + good + "/" + Q.length + ". « " + $("sTitle").textContent + " » Et vous ?";
-  try { await navigator.clipboard.writeText(txt); $("copy").textContent = "Copié !"; }
-  catch (e) { $("copy").textContent = "Copie impossible"; }
-  setTimeout(() => { $("copy").textContent = "Copier mon score"; }, 1500);
+  const txt = "Les champions de l'impact, édition 2026 : " + good + "/" + Q.length + ". « " + $("sTitle").textContent + " » Et vous ?";
+  try { await navigator.clipboard.writeText(txt); $("copy").textContent = "COPIÉ !"; }
+  catch (e) { $("copy").textContent = "COPIE IMPOSSIBLE"; }
+  setTimeout(() => { $("copy").textContent = "COPIER MON SCORE"; }, 1500);
 });
 </script>
 
