@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Quiz Share it 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Urbanist:wght@400;600;800;900&display=swap">
+<style>
+/* Layout : un plateau de jeu télé parodique. Fond studio bleu avec projecteur, titres en capitales condensées, réponses en pastilles dorées. Une colonne, un écran à la fois. */
+:root {
+  --studio: #08154A;
+  --studio-2: #1534A8;
+  --or: #FFC72C;
+  --or-fonce: #E0A400;
+  --blanc: #FFFFFF;
+  --encre: #08154A;
+  --vert: #22C55E;
+  --rouge: #EF4444;
+  --rose: #F9217E;
+  --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --font: "Urbanist", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { min-height: 100%; background: var(--studio); }
+body {
+  min-height: 100%; margin: 0; color: var(--blanc); font-family: var(--font); font-size: 16px; line-height: 1.45;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.22), transparent 70%),
+    repeating-conic-gradient(from 0deg at 50% 0%, rgba(255,255,255,.05) 0 6deg, transparent 6deg 12deg),
+    linear-gradient(180deg, var(--studio-2), var(--studio) 70%);
+  background-attachment: fixed;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 22px 40px;
+}
+.page { max-width: 520px; margin: 0 auto; display: grid; gap: 18px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.presents { font-weight: 800; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--or); }
+.mute { font: 700 13px var(--font); color: var(--blanc); background: rgba(255,255,255,.12); border: none; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+
+.logo { text-align: center; display: grid; gap: 2px; padding-block: 6px; }
+.logo .l1 { font-family: var(--display); font-size: clamp(22px, 6vw, 28px); letter-spacing: .04em; color: var(--blanc); text-transform: uppercase; }
+.logo .l2 {
+  font-family: var(--display); font-size: clamp(44px, 14vw, 72px); line-height: .95; text-transform: uppercase;
+  color: var(--or); text-shadow: 0 4px 0 var(--or-fonce), 0 8px 24px rgba(0,0,0,.45);
+}
+.logo .l3 { font-weight: 800; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+
+.host {
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 16px;
+  padding: 14px 16px; display: grid; gap: 4px;
+}
+.host .who { font-weight: 800; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--or); }
+.host p { margin: 0; font-size: 16px; }
+
+label { font-weight: 800; font-size: 14px; }
+input[type="text"] { font: 600 18px var(--font); padding: 13px 16px; border-radius: 999px; border: 3px solid var(--or); width: 100%; color: var(--encre); background: var(--blanc); }
+.check { display: flex; gap: 10px; align-items: center; font-weight: 600; font-size: 15px; }
+.check input { width: 20px; height: 20px; accent-color: var(--or); }
+.field { display: grid; gap: 6px; }
+
+.btn {
+  font-family: var(--display); font-size: 22px; letter-spacing: .06em; text-transform: uppercase;
+  cursor: pointer; border: none; border-radius: 999px; padding: 14px 30px;
+  background: var(--or); color: var(--encre); box-shadow: 0 5px 0 var(--or-fonce);
+  justify-self: center;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--or-fonce); }
+.btn.ghost { background: rgba(255,255,255,.14); color: var(--blanc); box-shadow: none; font-size: 18px; }
+.btn:focus-visible, .opt:focus-visible, input:focus-visible, .mute:focus-visible { outline: 3px solid var(--blanc); outline-offset: 3px; }
+
+.bandeau { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.qnum { font-family: var(--display); font-size: 20px; letter-spacing: .05em; text-transform: uppercase; }
+.pts { font-family: var(--display); font-size: 20px; letter-spacing: .05em; background: var(--or); color: var(--encre); border-radius: 999px; padding: 4px 14px; font-variant-numeric: tabular-nums; }
+.top-call { font-family: var(--display); font-size: 34px; color: var(--or); letter-spacing: .04em; line-height: 1; }
+.question {
+  background: linear-gradient(180deg, #FFFFFF, #E8ECFA); color: var(--encre);
+  border-radius: 20px; padding: 18px 18px; font-weight: 800; font-size: clamp(19px, 5.2vw, 22px); line-height: 1.3;
+  box-shadow: 0 0 0 4px var(--or), 0 10px 30px rgba(0,0,0,.35); text-wrap: balance;
+}
+.opts { display: grid; gap: 10px; }
+.opt {
+  display: flex; gap: 12px; align-items: center; text-align: left;
+  font: 700 17px var(--font); color: var(--blanc); cursor: pointer;
+  background: linear-gradient(180deg, #2447C9, #12308F); border: 3px solid var(--or); border-radius: 999px; padding: 10px 18px 10px 10px;
+}
+.opt .letter { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--or); color: var(--encre); display: grid; place-items: center; font-family: var(--display); font-size: 18px; }
+.opt:disabled { cursor: default; }
+.opt.good { background: linear-gradient(180deg, #2BD46A, #179848); border-color: #fff; }
+.opt.bad { background: linear-gradient(180deg, #F87171, #C62828); border-color: #fff; }
+.opt.dim { opacity: .45; }
+.explain .verdict { font-family: var(--display); font-size: 26px; letter-spacing: .04em; text-transform: uppercase; }
+.explain .verdict.good { color: var(--vert); }
+.explain .verdict.bad { color: var(--rouge); }
+
+.score { text-align: center; display: grid; gap: 6px; }
+.score .big { font-family: var(--display); font-size: 84px; line-height: 1; color: var(--or); text-shadow: 0 4px 0 var(--or-fonce); font-variant-numeric: tabular-nums; }
+.score .title { font-family: var(--display); font-size: clamp(26px, 7vw, 34px); line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
+.score .time { color: rgba(255,255,255,.75); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.note { font-size: 12px; color: rgba(255,255,255,.6); text-align: center; margin: 0; }
+.outro { text-align: center; color: rgba(255,255,255,.85); margin: 0; }
+</style>
+
+<main class="page">
+  <div class="top">
+    <div class="presents">Share it présente</div>
+    <button class="mute" id="mute" type="button" aria-pressed="false">🔊 Son</button>
+  </div>
+
+  <!-- Accueil -->
+  <section id="home" class="page">
+    <div class="logo">
+      <div class="l1">Les champions</div>
+      <div class="l2">de l'impact</div>
+      <div class="l3">Spéciale 2026</div>
+    </div>
+    <div class="host">
+      <div class="who">L'animateur</div>
+      <p>Bonsoir, bonsoir ! Ce soir, 8 questions sur les associations qu'on accompagne. Pas de joker, pas de public, que du cœur. Êtes-vous prêt·e ?</p>
+    </div>
+    <button class="btn" id="go" type="button">Je me lance !</button>
+    <p class="note">Le chrono démarre à la première question. Rien n'est enregistré.</p>
+  </section>
+
+  <!-- Question -->
+  <section id="quiz" class="page" hidden>
+    <div class="bandeau">
+      <div class="qnum" id="qNum"></div>
+      <div class="pts" id="pts">0 pt</div>
+    </div>
+    <div class="top-call" aria-hidden="true">Top !</div>
+    <div class="question" id="qText"></div>
+    <div class="opts" id="opts"></div>
+    <div class="host explain" id="explain" hidden aria-live="polite">
+      <div class="verdict" id="verdict"></div>
+      <p id="expText"></p>
+    </div>
+    <button class="btn" id="next" type="button" hidden>Question suivante</button>
+  </section>
+
+  <!-- Résultat -->
+  <section id="result" class="page" hidden>
+    <div class="score">
+      <div class="presents">Résultat de notre candidat·e</div>
+      <div class="big" id="sBig"></div>
+      <div class="title" id="sTitle"></div>
+      <div class="time" id="sTime"></div>
+    </div>
+    <p class="outro">Le mot le plus écrit dans nos 156 témoignages ? « Équipe ». 87 fois. Merci à toutes celles et ceux qui la composent.</p>
+    <div class="row">
+      <button class="btn" id="copy" type="button">Copier mon score</button>
+      <button class="btn ghost" id="again" type="button">Rejouer</button>
+    </div>
+    <p class="note">Votre score n'est enregistré nulle part. Il reste entre vous et l'animateur.</p>
+  </section>
+</main>
+
+<script>
+const Q = [
+  { q: "En France, quelle part des jeunes sans-abri est passée par l'Aide sociale à l'enfance ?",
+    o: ["1 sur 20", "1 sur 10", "1 sur 4", "1 sur 2"], a: 2,
+    e: "1 sur 4. C'est pour eux que Chapitre 2 crée des binômes entre jeunes de 16 à 25 ans aux parcours différents. Son nouveau CRM permet de les former et de les suivre à grande échelle." },
+  { q: "Le réseau Le Carillon de La Cloche, c'est combien de commerces où les personnes à la rue peuvent recharger leur téléphone ou boire un café ?",
+    o: ["130", "1 300", "13 000", "130 000"], a: 1,
+    e: "1 300 lieux solidaires. Et l'objectif pour 2030, c'est 2 500 lieux dans 51 villes." },
+  { q: "Le nouveau CRM de La Cloche s'appelle Charlie. Pourquoi ?",
+    o: ["C'est le prénom du développeur", "En hommage à Charly, poissonnier d'Oberkampf", "C'est le chien de la directrice", "Charlie, c'est plus sympa que CRM"], a: 1,
+    e: "Charly, poissonnier rue Oberkampf, a été le tout premier commerçant du réseau Le Carillon." },
+  { q: "Quelle part des enseignants en France utilise ÊtrePROF, la plateforme d'Ecolhuma ?",
+    o: ["1 sur 50", "1 sur 20", "1 sur 6", "1 sur 2"], a: 2,
+    e: "1 sur 6, soit 154 000 profs en 2024. La nouvelle version, sortie cette année, ajoute un générateur de séances par IA pour gagner du temps sur la préparation des cours." },
+  { q: "Le SOLIS bot de Solidarités International échange avec des populations touchées par des crises. Dans quel pays a-t-il fait ses preuves ?",
+    o: ["Haïti", "Liban", "Mali", "Bangladesh"], a: 1,
+    e: "Au Liban. Sa V2, multilingue et plus robuste, est faite pour être déployée dans d'autres pays." },
+  { q: "La cohorte forwa réunit 14 associations qui utilisent l'IA pour l'éducation et l'emploi. Dans combien de pays ?",
+    o: ["2", "4", "6", "10"], a: 2,
+    e: "6 pays : France, Allemagne, Espagne, Roumanie, République tchèque et Ukraine. Par exemple, East Europe Foundation a créé un tuteur IA pour les élèves ukrainiens." },
+  { q: "Après un Éclairage digital avec Share it, La Ferme de Tobie a obtenu gratuitement…",
+    o: ["Un site web", "Canva pour 50 utilisateurs", "Un ordinateur par salarié", "Notion à vie"], a: 1,
+    e: "Canva pour 50 utilisateurs, via un forfait GoodStack. Elle a aussi demandé les tarifs associatifs de Microsoft 365. Une astuce à piquer pour toutes les assos !" },
+  { q: "Un Product Owner nous a écrit : « Avant Share it, les “US” c'était les États-Unis, les “PO” les Pyrénées-Orientales et “Java”… »",
+    o: ["une île indonésienne", "un groupe de musique", "une danse de salon", "un café trop fort"], a: 1,
+    e: "Un groupe de musique. « Maintenant je comprends des blagues d'informaticiens (parfois elles sont drôles) et j'adore mon nouveau job de PO ! »" },
+];
+const GOOD = ["Oui !", "Bravo !", "Exactement !", "Formidable !"];
+const BAD = ["Ah non…", "Dommage !", "Eh non !", "Raté !"];
+const TITLES = [
+  [2, "Éliminé·e au premier tour (mais applaudi·e)"],
+  [5, "Demi-finaliste honorable"],
+  [7, "Finaliste, à un cheveu du titre"],
+  [8, "Champion·ne de l'impact !"],
+];
+const LETTERS = ["A", "B", "C", "D"];
+
+const $ = (id) => document.getElementById(id);
+let i = 0, good = 0, t0 = 0, answered = false, muted = false, ctx = null;
+
+function tone(freqs, type, dur) {
+  if (muted) return;
+  try {
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    freqs.forEach((f, k) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + k * dur;
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur + 0.02);
+    });
+  } catch (e) {}
+}
+const ding = () => tone([880, 1320], "sine", 0.16);
+const buzz = () => tone([140, 120], "sawtooth", 0.22);
+const fanfare = () => tone([523, 659, 784, 1047], "triangle", 0.15);
+
+function show(id) { ["home", "quiz", "result"].forEach((s) => $(s).hidden = s !== id); window.scrollTo({ top: 0 }); }
+function fmt(s) { return Math.floor(s / 60) + " min " + String(s % 60).padStart(2, "0"); }
+function pts(n) { return n + (n > 1 ? " pts" : " pt"); }
+
+function renderQ() {
+  answered = false;
+  const item = Q[i];
+  $("qNum").textContent = "Question " + (i + 1) + " / " + Q.length;
+  $("pts").textContent = pts(good);
+  $("qText").textContent = item.q;
+  $("explain").hidden = true; $("next").hidden = true;
+  const box = $("opts"); box.innerHTML = "";
+  item.o.forEach((txt, k) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt";
+    const l = document.createElement("span"); l.className = "letter"; l.textContent = LETTERS[k];
+    const s = document.createElement("span"); s.textContent = txt;
+    b.append(l, s);
+    b.addEventListener("click", () => pick(k));
+    box.append(b);
+  });
+}
+
+function pick(k) {
+  if (answered) return; answered = true;
+  const item = Q[i], btns = [...$("opts").children];
+  btns.forEach((b, n) => { b.disabled = true; if (n !== item.a && n !== k) b.classList.add("dim"); });
+  btns[item.a].classList.add("good");
+  const ok = k === item.a;
+  if (ok) { good++; ding(); } else { btns[k].classList.add("bad"); buzz(); }
+  $("pts").textContent = pts(good);
+  $("verdict").textContent = ok ? GOOD[i % GOOD.length] : BAD[i % BAD.length];
+  $("verdict").className = "verdict " + (ok ? "good" : "bad");
+  $("expText").textContent = item.e;
+  $("explain").hidden = false;
+  $("next").textContent = i === Q.length - 1 ? "Verdict !" : "Question suivante";
+  $("next").hidden = false; $("next").focus();
+}
+
+function finish() {
+  const secs = Math.round((Date.now() - t0) / 1000);
+  $("sBig").textContent = pts(good);
+  $("sTitle").textContent = TITLES.find((t) => good <= t[0])[1];
+  $("sTime").textContent = "Sur " + Q.length + " questions, en " + fmt(secs) + ".";
+  if (good >= 6) fanfare();
+  show("result");
+}
+
+$("go").addEventListener("click", () => { i = 0; good = 0; t0 = Date.now(); renderQ(); show("quiz"); });
+$("next").addEventListener("click", () => { i++; if (i < Q.length) renderQ(); else finish(); });
+$("again").addEventListener("click", () => show("home"));
+$("mute").addEventListener("click", (e) => {
+  muted = !muted;
+  e.currentTarget.setAttribute("aria-pressed", String(muted));
+  e.currentTarget.textContent = muted ? "🔇 Muet" : "🔊 Son";
+});
+$("copy").addEventListener("click", async () => {
+  const txt = "Les champions de l'impact, spéciale 2026 : " + good + "/" + Q.length + ". « " + $("sTitle").textContent + " » Et vous ?";
+  try { await navigator.clipboard.writeText(txt); $("copy").textContent = "Copié !"; }
+  catch (e) { $("copy").textContent = "Copie impossible"; }
+  setTimeout(() => { $("copy").textContent = "Copier mon score"; }, 1500);
+});
+</script>
+
+</body>
+</html>
