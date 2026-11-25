@@ -127,6 +127,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
 .hud .qn { color: #fff; letter-spacing: .04em; }
 .ans.long { font-size: 18px; font-weight: 600; }
 .body p { margin: 0; }
+.intro-txt { font-size: 21px; font-weight: 600; line-height: 1.5; }
 .lead { font-weight: 500; font-size: 19px; line-height: 1.55; color: var(--encre); }
 .start {
   justify-self: start; font: 14px var(--display); letter-spacing: .04em; color: #fff; background: var(--magenta); border: 0; cursor: pointer; padding: 16px 18px 14px;
@@ -163,7 +164,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
   </header>
 
   <main class="col">
-    <div class="kicker plate"><span class="tag">NIVEAU 2026</span> Share it · Arcade de l'impact</div>
+    <div class="kicker plate"><span class="tag">NIVEAU 2026</span></div>
 
     <!-- Accueil -->
     <section class="stage" id="intro">
@@ -172,8 +173,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
         <div class="win">
           <div class="bar"><span>NOUVEAU DÉFI DÉBLOQUÉ</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="body">
-            <p class="q">Vous pensez avoir suivi notre année ? Prouvez-le.</p>
-            <p class="lead">10 questions sur les assos qu'on a accompagnées en 2026. Une bonne réponse rapporte 100 points. Une mauvaise vous apprend un truc que vous pourrez ressortir au prochain dîner. Crédits illimités, pas besoin de pièce.</p>
+            <p class="lead intro-txt">10 questions sur l'impact de Share it ou sur les associations qu'on a accompagnées en 2026. Une bonne réponse rapporte 100 points. Une mauvaise vous apprend un truc que vous pourrez ressortir au prochain dîner.</p>
           </div>
         </div>
         <button class="start" id="start" type="button">PRESS START <span class="blink">▶</span></button>
@@ -216,7 +216,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
     </section>
 
     <div class="prog plate" id="prog" aria-hidden="true"></div>
-    <p class="credit plate made">Une simple page HTML de 110 Ko, écrite par l'équipe com de Share it avec l'aide d'une IA. Aucune IA ne tourne pendant que vous jouez : pas d'animation en continu, pas de traceur, aucune donnée collectée.</p>
+    <p class="credit plate made">Une page HTML de 110 Ko, hébergée sur GitHub et codée par Share it avec l'aide d'une IA générative. Aucune IA ne tourne pendant que vous jouez : pas d'animation en continu, pas de traceur, aucune donnée collectée.</p>
   </main>
 </div>
 
@@ -561,7 +561,7 @@ function signText(t) {
   [..."SHARE IT"].forEach((ch, i) => {
     const glyph = FONT[ch];
     if (glyph) {
-      const off = i === 6 && !reduced && (Math.sin(t * 7) > 0.92 || (t % 5) < 0.12);
+      const off = false;
       glyph.forEach((row, r) => [...row].forEach((v, c) => {
         if (v !== "1") return;
         screen.fillStyle = off ? "#4a1a5c" : "#ff4fc0"; screen.fillRect(cx + c, y + 2 + r, 1, 1);
