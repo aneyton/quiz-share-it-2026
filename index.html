@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Arcade de l'impact</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Rubik:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen&family=Rubik:wght@500..700&display=swap">
 <style>
 /* Layout : un Paris synthwave de nuit en pixel art (canvas plein écran, basse résolution agrandie), avec deux personnages sur le trottoir ; l'interface du quiz flotte dessus, à gauche sur grand écran, sous la ville sur mobile. Titres en pixel, textes à lire en Rubik. */
 :root {
@@ -46,7 +46,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
 /* HUD */
 .hud { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; font-family: var(--hud); font-size: 16px; letter-spacing: .04em; padding: 6px 12px; }
 .hud .p1 { color: var(--cyan); }
-.hud b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.hud b { font-weight: 400; font-variant-numeric: tabular-nums; }
 .hud .hs { color: var(--jaune); }
 .hud .life { color: var(--magenta); display: flex; align-items: center; gap: 12px; letter-spacing: .15em; }
 .mute { font: inherit; color: #fff; background: none; border: 0; padding: 2px 4px; cursor: pointer; letter-spacing: .04em; }
@@ -114,14 +114,14 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
 .res .big { font-size: clamp(34px, 7vw, 56px); }
 .res.ko .big { background: linear-gradient(180deg, #ffe0ea 0 28%, var(--rose) 28% 50%, var(--rouge) 50% 72%, #b0185a 72% 100%); -webkit-background-clip: text; background-clip: text; }
 .res p { margin: 0; font-weight: 500; font-size: 19px; line-height: 1.55; max-width: 60ch; color: var(--encre); }
-.res p b { background: var(--jaune); padding: 1px 5px; font-weight: 800; }
+.res p b { background: var(--jaune); padding: 1px 5px; font-weight: 700; }
 .next {
   justify-self: start; font: 12px var(--display); letter-spacing: .04em; color: var(--nuit); background: var(--jaune); border: 0; cursor: pointer; padding: 14px 16px 12px;
   box-shadow: 0 -3px 0 0 var(--encre), 0 3px 0 0 var(--encre), -3px 0 0 0 var(--encre), 3px 0 0 0 var(--encre), inset 0 -5px 0 0 var(--orange);
 }
 .next:hover { transform: translateY(-2px); }
 .next:focus-visible { outline: 3px dashed var(--magenta); outline-offset: 6px; }
-.blink { animation: blink 1s steps(2) infinite; }
+.blink { }
 @keyframes blink { 50% { opacity: 0; } }
 
 .hud .qn { color: #fff; letter-spacing: .04em; }
@@ -141,6 +141,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
 .prog i.now { background: var(--jaune); }
 .tier { font-weight: 700; font-size: 21px; line-height: 1.35; color: var(--magenta); }
 .score-big { font-family: var(--display); font-size: clamp(28px, 6vw, 44px); color: var(--encre); }
+.credit.made { font-family: var(--texte); font-weight: 500; font-size: 14px; line-height: 1.45; letter-spacing: 0; max-width: 60ch; padding: 6px 10px; }
 .credit { justify-self: start; font-family: var(--hud); font-size: 13px; color: #fff; padding: 3px 8px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,6 +216,7 @@ body { margin: 0; background: var(--nuit); color: var(--encre); font-family: var
     </section>
 
     <div class="prog plate" id="prog" aria-hidden="true"></div>
+    <p class="credit plate made">Une simple page HTML de 110 Ko, écrite par l'équipe com de Share it avec l'aide d'une IA. Aucune IA ne tourne pendant que vous jouez : pas d'animation en continu, pas de traceur, aucune donnée collectée.</p>
   </main>
 </div>
 
@@ -476,7 +478,7 @@ function eiffel(cx, ht) {
       const edge = Math.abs(x) === hw;
       const c = deck1 || deck2 ? "#6a3fb0" : edge ? "#4f2a8f" : (x + r) % 3 === 0 ? "#4a2585" : "#2a1160";
       px(cx + x, y, c);
-      if (((x * 7 + r * 13) % 11) === 0) sparkles.push([cx + x, y]);
+      
     }
   }
   px(cx, top - 1, "#ff2fa8"); px(cx, top - 2, "#ffd23f");
@@ -623,57 +625,55 @@ function sprite(sp, x, y, blink) {
   }));
 }
 function react(ok) {
-  mood = { ok, t0: performance.now() };
+  mood = { ok, t0: performance.now() }; wake();
   if (ok) for (let k = 0; k < 6; k++) hearts.push({ x: sunX - 12 + k * 5, y: y1 - 26, t0: performance.now() + k * 90 });
 }
 
-let last = 0;
-function frame(now) {
-  if (now - last > 33) {
-    last = now;
-    const t = reduced ? 0 : now / 1000;
-    screen.drawImage(bg, 0, 0);
-    for (const s of stars) if (Math.sin(t * 3 + s.ph) > 0.1) { screen.fillStyle = s.c; screen.fillRect(s.x, s.y, 1, 1); }
-    if (sign) signText(t);
-    for (const [sx, sy] of sparkles) if (!reduced && Math.random() < 0.12) { screen.fillStyle = Math.random() < 0.5 ? "#ffffff" : "#fff3a0"; screen.fillRect(sx, sy, 1, 1); }
-    // sol en grille qui défile
-    screen.fillStyle = "#14062f"; screen.fillRect(0, y1, W, H - y1);
-    screen.fillStyle = "#2c0b52"; screen.fillRect(0, y1, W, 2);
-    const N = 9, off = (t * 0.45) % 1;
-    for (let k = 0; k < N; k++) {
-      const p = (k + off) / N, y = y1 + Math.round((H - y1) * p * p);
-      screen.fillStyle = p < 0.25 ? "#7a1a7c" : "#ff3fae"; screen.fillRect(0, y, W, 1);
-    }
-    const gg = g; g = screen;
-    for (let i = -24; i <= 24; i++) line(sunX + i * W * 0.018, y1, sunX + i * W * 0.12, H + 2, "#b0258f");
-    g = gg;
-    // personnages
-    const foot = y1 - 2;
-    people.forEach((p, i) => {
-      let dy = 0, dx = 0;
-      if (!reduced) dy = Math.floor(t * 2 + i) % 2 ? 0 : -1;
-      if (mood) {
-        const e = (now - mood.t0) / 1000;
-        if (e < 1.4) {
-          if (mood.ok) dy = -Math.round(Math.abs(Math.sin((e + i * 0.12) * Math.PI * 2.2)) * 6);
-          else { dy = 1; dx = Math.round(Math.sin(e * 30)) * (e < 0.6 ? 1 : 0); }
-        } else mood = null;
-      }
-      const blink = !reduced && ((t + i * 1.3) % 3.4) < 0.14;
-      sprite(p.sp, p.x + dx, foot - p.sp.rows.length + dy, blink);
-    });
-    hearts = hearts.filter((h) => now - h.t0 < 1200);
-    for (const h of hearts) {
-      const e = (now - h.t0) / 1200; if (e < 0) continue;
-      HEART.forEach((row, r) => [...row].forEach((v, c) => { if (v === "1") { screen.fillStyle = "#ff2fa8"; screen.fillRect(h.x + c, Math.round(h.y - e * 14) + r, 1, 1); } }));
-    }
+/* Version sobre : la scène est dessinée une fois, puis plus rien ne bouge.
+   Seule exception, les personnages réagissent environ 1,5 s après une réponse. */
+function render(now) {
+  screen.drawImage(bg, 0, 0);
+  for (const s of stars) if (Math.sin(s.ph) > 0.1) { screen.fillStyle = s.c; screen.fillRect(s.x, s.y, 1, 1); }
+  if (sign) signText(0);
+  screen.fillStyle = "#14062f"; screen.fillRect(0, y1, W, H - y1);
+  screen.fillStyle = "#2c0b52"; screen.fillRect(0, y1, W, 2);
+  const N = 9;
+  for (let k = 0; k < N; k++) {
+    const p = k / N, y = y1 + Math.round((H - y1) * p * p);
+    screen.fillStyle = p < 0.25 ? "#7a1a7c" : "#ff3fae"; screen.fillRect(0, y, W, 1);
   }
-  requestAnimationFrame(frame);
+  const gg = g; g = screen;
+  for (let i = -24; i <= 24; i++) line(sunX + i * W * 0.018, y1, sunX + i * W * 0.12, H + 2, "#b0258f");
+  g = gg;
+  const foot = y1 - 2;
+  people.forEach((p, i) => {
+    let dy = 0, dx = 0;
+    if (mood) {
+      const e = (now - mood.t0) / 1000;
+      if (e < 1.4) {
+        if (mood.ok) dy = -Math.round(Math.abs(Math.sin((e + i * 0.12) * Math.PI * 2.2)) * 6);
+        else { dy = 1; dx = Math.round(Math.sin(e * 30)) * (e < 0.6 ? 1 : 0); }
+      } else mood = null;
+    }
+    sprite(p.sp, p.x + dx, foot - p.sp.rows.length + dy, false);
+  });
+  hearts = hearts.filter((h) => now - h.t0 < 1200);
+  for (const h of hearts) {
+    const e = (now - h.t0) / 1200; if (e < 0) continue;
+    HEART.forEach((row, r) => [...row].forEach((v, c) => { if (v === "1") { screen.fillStyle = "#ff2fa8"; screen.fillRect(h.x + c, Math.round(h.y - e * 14) + r, 1, 1); } }));
+  }
 }
+let running = false;
+function loop(now) {
+  render(now);
+  if (!reduced && (mood || hearts.length)) requestAnimationFrame(loop);
+  else { running = false; mood = null; hearts = []; render(now); }
+}
+function wake() { if (!running) { running = true; requestAnimationFrame(loop); } }
 
 let rz;
-addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { build(); last = 0; }, 150); });
-build(); requestAnimationFrame(frame);
+addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { build(); render(performance.now()); }, 150); });
+build(); render(performance.now());
 </script>
 </body>
 </html>
